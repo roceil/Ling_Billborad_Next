@@ -21,7 +21,7 @@ export const saleItems = [
   },
   {
     id: 4,
-    name: '我看看最多可以幾個字13個字',
+    name: '我看看最多',
     price: 40,
     editing: false,
   },
@@ -33,13 +33,13 @@ export const saleItems = [
   },
   {
     id: 6,
-    name: '鉛鉛鉛鉛鉛鉛鉛',
-    price: 60,
+    name: '鉛鉛鉛鉛鉛鉛',
+    price: 999,
     editing: false,
   },
   {
     id: 7,
-    name: '我看看最多可以幾個字',
+    name: '我看看最多可',
     price: 70,
     editing: false,
   },

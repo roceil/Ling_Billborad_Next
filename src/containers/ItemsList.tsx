@@ -104,66 +104,65 @@ export default function ItemsList() {
             className='text-gray-700 mb-5 border-b-2 border-gray-300 pb-2 '
           >
             {/* 項目名稱 */}
-            <h3 className='p-1.5 font-medium bg-slate-200 rounded-sm text-xl inline-block'>
-              {item.name}
-            </h3>
-
             <div className='flex space-x-5 items-center justify-between mt-2 min-h-[40px]'>
+              <h3 className='p-1.5 font-medium bg-slate-200 rounded-sm text-xl inline-block'>
+                {item.name}
+              </h3>
               {/* 價格區塊 */}
-              <div className='text-lg flex'>
+              <div className='text-lg flex items-center'>
                 NT$：
                 <EditablePrice
                   price={item.price}
                   editing={item.editing}
                 />
               </div>
+            </div>
 
-              {/* 更改按鈕 */}
-              <div
-                className={`flex space-x-2 ${
-                  editPriceStatus ? 'block' : 'hidden'
+            {/* 更改按鈕 */}
+            <div
+              className={` space-x-2 mt-2 ${
+                editPriceStatus ? 'flex' : 'hidden'
+              }`}
+            >
+              <button
+                type='button'
+                onClick={() => editHandler(item)}
+                className={`bg-slate-400 py-2 px-3 w-1/2 rounded-lg text-white ${
+                  item.editing ? '!hidden' : '!block'
                 }`}
               >
-                <button
-                  type='button'
-                  onClick={() => editHandler(item)}
-                  className={`bg-slate-400 py-2 px-3 rounded-lg text-white ${
-                    item.editing ? '!hidden' : '!block'
-                  }`}
-                >
-                  更改
-                </button>
-                <button
-                  type='button'
-                  onClick={() => deleteItemModal(item)}
-                  className={`bg-red-500 py-2 px-3 rounded-lg text-white ${
-                    item.editing ? '!hidden' : '!block'
-                  }`}
-                >
-                  刪除
-                </button>
-              </div>
-
-              {/* 確認按鈕 */}
-              <div
-                className={`space-x-2 ${item.editing ? '!block' : '!hidden'}`}
+                更改
+              </button>
+              <button
+                type='button'
+                onClick={() => deleteItemModal(item)}
+                className={`bg-red-500 py-2 px-3 w-1/2 rounded-lg text-white ${
+                  item.editing ? '!hidden' : '!block'
+                }`}
               >
-                <button
-                  type='button'
-                  onClick={() => confirmHandler(item)}
-                  className='bg-emerald-400 py-2 px-3 rounded-lg text-white'
-                >
-                  確認
-                </button>
+                刪除
+              </button>
+            </div>
 
-                <button
-                  type='button'
-                  onClick={() => editHandler(item)}
-                  className='bg-rose-400 py-2 px-3 rounded-lg text-white'
-                >
-                  取消
-                </button>
-              </div>
+            {/* 確認按鈕 */}
+            <div
+              className={`space-x-2  mt-2 ${item.editing ? 'flex' : 'hidden'}`}
+            >
+              <button
+                type='button'
+                onClick={() => confirmHandler(item)}
+                className='bg-emerald-400 py-2 px-3 w-1/2 rounded-lg text-white'
+              >
+                確認
+              </button>
+
+              <button
+                type='button'
+                onClick={() => editHandler(item)}
+                className='bg-rose-400 py-2 px-3 w-1/2 rounded-lg text-white'
+              >
+                取消
+              </button>
             </div>
           </li>
         ))}
