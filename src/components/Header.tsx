@@ -22,11 +22,9 @@ export default function Header() {
   }, [])
 
   return (
-    <>
-      <header className='container pt-5'>
-        <h1>新金鑫回收價目表</h1>
-        <p className='text-center mt-2 text-3xl clockFont'>{date}</p>
-      </header>
-    </>
+    <header className='container pt-5'>
+      <h1>新金鑫回收價目表</h1>
+      <p className='text-center mt-2 text-3xl clockFont'>{date}</p>
+    </header>
   )
 }
