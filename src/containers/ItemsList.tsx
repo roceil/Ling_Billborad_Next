@@ -86,7 +86,7 @@ export default function ItemsList() {
         ref={inputRef}
         placeholder={price.toString()}
         type='tel'
-        className='font-bold inline-block rounded-lg w-10 border-2 border-black focus:outline-none px-1.5 py-0.5'
+        className='font-bold inline-block rounded-lg w-[60px] border-2 border-black focus:outline-none px-1.5 py-0.5'
       />
     ) : (
       <p>
