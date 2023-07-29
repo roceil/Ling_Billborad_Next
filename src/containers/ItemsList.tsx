@@ -1,10 +1,9 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import Swal from 'sweetalert2'
-import { saleItems } from '@/assets/fakeData'
-import { useEditPriceStore } from '@/assets/store'
+import { useEditPriceStore, useSaleItemsStore } from '@/assets/store'
 
 // 定義 saleItems 的型別
-type SaleItem = {
+export type SaleItem = {
   id: number
   name: string
   price: number
@@ -13,21 +12,17 @@ type SaleItem = {
 
 export default function ItemsList() {
   const editPriceStatus = useEditPriceStore(state => state.editPrice)
-  const [renderData, setRenderData] = useState<SaleItem[]>(saleItems)
+  const renderData = useSaleItemsStore(state => state.renderData)
+  const editRenderData = useSaleItemsStore(state => state.editRenderData)
+  const confirmRenderData = useSaleItemsStore(state => state.confirmRenderData)
+  const deleteSaleItem = useSaleItemsStore(state => state.deleteSaleItem)
+
   const inputRef = useRef<HTMLInputElement>(null)
 
   // ====== 更改價格 ======
   const editHandler = (item: SaleItem) => {
-    setRenderData(prev =>
-      prev.map(prevItem =>
-        prevItem.id === item.id
-          ? {
-              ...prevItem,
-              editing: !prevItem.editing,
-            }
-          : prevItem,
-      ),
-    )
+    console.log(item)
+    editRenderData(item.id)
   }
 
   // ====== 確認價格 ======
@@ -35,17 +30,7 @@ export default function ItemsList() {
     const inputValue = inputRef.current?.value
 
     if (inputValue) {
-      setRenderData(prev =>
-        prev.map(prevItem =>
-          prevItem.id === item.id
-            ? {
-                ...prevItem,
-                price: Number(inputValue),
-                editing: !prevItem.editing,
-              }
-            : prevItem,
-        ),
-      )
+      confirmRenderData(item.id, inputValue)
     }
   }
 
@@ -73,7 +58,7 @@ export default function ItemsList() {
 
   // ====== 確認刪除 ======
   const deleteHandler = (item: SaleItem) => {
-    setRenderData(prev => prev.filter(prevItem => prevItem.id !== item.id))
+    deleteSaleItem(item.id)
   }
 
   // ====== 編輯價格切換（待移出） ======
