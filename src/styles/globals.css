@@ -9,6 +9,10 @@
   button{
     @apply active:scale-75 focus:shadow-none
   }
+  input {
+  /* 禁用 iPhone 上的手動縮放 */
+  -webkit-user-scalable: none;
+  }
   body {
     background-color: #8EC5FC;
     background-image: linear-gradient(62deg, #8EC5FC 0%, #E0C3FC 100%);
@@ -29,4 +33,19 @@
   .clockFont{
     font-family: 'Handjet', cursive;
   }
+}
+
+
+
+/* 以下是控制ant-design的樣式 */
+.ant-btn-primary{
+  @apply from-blue-500 via-blue-600 to-blue-700 shadow-blue-500/50 text-white bg-gradient-to-r hover:bg-gradient-to-br focus:outline-none shadow-lg font-bold rounded-lg px-5 text-center
+}
+
+.ant-form-item-label{
+  padding-bottom: 0 !important;
+}
+.ant-form-item-required{
+  font-size: 18px !important;
+  font-weight: bold;
 }
