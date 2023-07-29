@@ -24,3 +24,9 @@
     color: #2D3748;
   }
 }
+
+@layer utilities {
+  .clockFont{
+    font-family: 'Handjet', cursive;
+  }
+}
