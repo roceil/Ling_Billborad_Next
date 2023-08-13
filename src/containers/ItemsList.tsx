@@ -1,11 +1,12 @@
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
+import axios from 'axios'
 import { useEditPriceStore, useSaleItemsStore } from '@/assets/store'
 
 // 定義 saleItems 的型別
 export type SaleItem = {
-  id: number
-  name: string
+  _id: number
+  itemName: string
   price: number
   editing: boolean
 }
@@ -13,7 +14,8 @@ export type SaleItem = {
 export default function ItemsList() {
   const editPriceStatus = useEditPriceStore(state => state.editPrice)
   const renderData = useSaleItemsStore(state => state.renderData)
-  const editRenderData = useSaleItemsStore(state => state.editRenderData)
+  const setRenderData = useSaleItemsStore(state => state.setRenderData)
+  const editRenderDataID = useSaleItemsStore(state => state.editRenderDataID)
   const confirmRenderData = useSaleItemsStore(state => state.confirmRenderData)
   const deleteSaleItem = useSaleItemsStore(state => state.deleteSaleItem)
 
@@ -22,7 +24,7 @@ export default function ItemsList() {
   // ====== 更改價格 ======
   const editHandler = (item: SaleItem) => {
     console.log(item)
-    editRenderData(item.id)
+    editRenderDataID(item._id)
   }
 
   // ====== 確認價格 ======
@@ -30,7 +32,7 @@ export default function ItemsList() {
     const inputValue = inputRef.current?.value
 
     if (inputValue) {
-      confirmRenderData(item.id, inputValue)
+      confirmRenderData(item._id, inputValue)
     }
   }
 
@@ -58,7 +60,7 @@ export default function ItemsList() {
 
   // ====== 確認刪除 ======
   const deleteHandler = (item: SaleItem) => {
-    deleteSaleItem(item.id)
+    deleteSaleItem(item._id)
   }
 
   // ====== 編輯價格切換（待移出） ======
@@ -80,18 +82,35 @@ export default function ItemsList() {
     )
   }
 
+  // ====== 取得資料 GET API ======
+  const getSaleItems = () => {
+    axios
+      .get(`${process.env.API_URL}/api/getitems`)
+      .then(res => {
+        setRenderData(res.data)
+        console.log(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  useEffect(() => {
+    getSaleItems()
+  }, [])
+
   return (
     <div className='container mt-4'>
       <ul className='w-full h-[430px] bg-gray-50 rounded-2xl shadow-xl py-3 px-5 overflow-y-scroll'>
         {renderData.map(item => (
           <li
-            key={item.id}
+            key={item._id}
             className='text-gray-700 mb-5 border-b-2 border-gray-300 pb-2 '
           >
             {/* 項目名稱 */}
             <div className='flex space-x-5 items-center justify-between mt-2 min-h-[40px]'>
               <h3 className='p-1.5 font-medium bg-slate-200 rounded-sm text-xl inline-block'>
-                {item.name}
+                {item.itemName}
               </h3>
               {/* 價格區塊 */}
               <div className='text-lg flex items-center'>
