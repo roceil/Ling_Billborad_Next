@@ -1,3 +1,5 @@
+import axios from 'axios'
+import dayjs from 'dayjs'
 import { Button, Form, Input, InputNumber, Modal } from 'antd'
 import { useCreateModalStore, useSaleItemsStore } from '@/assets/store'
 
@@ -6,7 +8,26 @@ export default function CreateModal() {
 
   const modalStatus = useCreateModalStore(state => state.open)
   const setOpen = useCreateModalStore(state => state.setOpen)
-  const createSaleItem = useSaleItemsStore(state => state.addSaleItem)
+  const setRenderData = useSaleItemsStore(state => state.setRenderData)
+
+  // ====== 新增資料 POST API  ======
+  const createSaleItem = async (itemType: string, price: number) => {
+    try {
+      const { data } = await axios.post(
+        `${process.env.API_URL}/api/addnewitem`,
+        {
+          itemName: itemType,
+          price,
+          createdAt: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+          changedAt: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+        },
+      )
+      console.log(data)
+      setRenderData(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const onFinish = ({
     itemType,

@@ -1,5 +1,4 @@
 import { create } from 'zustand'
-import { saleItems } from '@/assets/fakeData'
 
 // ====== 管理是否編輯價格的狀態 ======
 interface editPrice {
@@ -27,27 +26,31 @@ export const useCreateModalStore = create<createModal>(set => ({
 
 // ====== 管理清單的狀態 ======
 interface SaleItem {
-  id: number
-  name: string
+  _id: number
+  itemName: string
   price: number
   editing: boolean
 }
 
 export const useSaleItemsStore = create<{
   renderData: SaleItem[]
-  editRenderData: (editItemId: number) => void
+  setRenderData: (renderData: SaleItem[]) => void
+  editRenderDataID: (editItemId: number) => void
   confirmRenderData: (editItemId: number, inputValue: string) => void
   deleteSaleItem: (item: number) => void
-  addSaleItem: (name: string, price: number) => void
+  // addSaleItem: (name: string, price: number) => void
 }>(set => ({
-  renderData: saleItems,
+  renderData: [],
+
+  // 顯示資料
+  setRenderData: (renderData: SaleItem[]) => set({ renderData }),
 
   // ====== 開啟編輯 ======
-  editRenderData: (editItemId: number) => {
+  editRenderDataID: (editItemId: number) => {
     // 當ID進來之後，要把該ID的editing改成true
     set(state => ({
       renderData: state.renderData.map(item =>
-        item.id === editItemId
+        item._id === editItemId
           ? {
               ...item,
               editing: !item.editing,
@@ -61,7 +64,7 @@ export const useSaleItemsStore = create<{
   confirmRenderData: (editItemId: number, inputValue: string) => {
     set(state => ({
       renderData: state.renderData.map(item =>
-        item.id === editItemId
+        item._id === editItemId
           ? {
               ...item,
               price: Number(inputValue),
@@ -76,23 +79,23 @@ export const useSaleItemsStore = create<{
   deleteSaleItem: itemID => {
     set(state => ({
       renderData: state.renderData.filter(
-        renderData => renderData.id !== itemID,
+        renderData => renderData._id !== itemID,
       ),
     }))
   },
 
   // ====== 新增種類 ======
-  addSaleItem: (name, price) => {
-    set(state => ({
-      renderData: [
-        ...state.renderData,
-        {
-          id: state.renderData.length + 1,
-          name,
-          price,
-          editing: false,
-        },
-      ],
-    }))
-  },
+  // addSaleItem: (name, price) => {
+  //   set(state => ({
+  //     renderData: [
+  //       ...state.renderData,
+  //       {
+  //         id: state.renderData.length + 1,
+  //         name,
+  //         price,
+  //         editing: false,
+  //       },
+  //     ],
+  //   }))
+  // },
 }))
