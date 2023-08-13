@@ -13,7 +13,14 @@ export default async function handler(
 ) {
   try {
     // 連線到 MongoDB
-    await client.connect();
+    await client
+      .connect()
+      .then(() => {
+        console.log("Connected successfully to server");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     const db: Db = client.db(dbName);
     const collection = db.collection(collectionName);
 
