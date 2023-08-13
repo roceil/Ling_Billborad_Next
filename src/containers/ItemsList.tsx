@@ -85,7 +85,7 @@ export default function ItemsList() {
   // ====== 取得資料 GET API ======
   const getSaleItems = () => {
     axios
-      .get(`${process.env.API_URL}/api/getitems`)
+      .get('https://ling-billborad-next.vercel.app/api/getitems')
       .then(res => {
         setRenderData(res.data)
         console.log(res.data)
