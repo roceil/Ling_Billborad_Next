@@ -1,7 +1,11 @@
 import axios from 'axios'
 import dayjs from 'dayjs'
 import { Button, Form, Input, InputNumber, Modal } from 'antd'
-import { useCreateModalStore, useSaleItemsStore } from '@/assets/store'
+import {
+  useCreateModalStore,
+  useLoadingStore,
+  useSaleItemsStore,
+} from '@/assets/store'
 
 export default function CreateModal() {
   const [form] = Form.useForm()
@@ -9,6 +13,7 @@ export default function CreateModal() {
   const modalStatus = useCreateModalStore(state => state.open)
   const setOpen = useCreateModalStore(state => state.setOpen)
   const setRenderData = useSaleItemsStore(state => state.setRenderData)
+  const loadingStatus = useLoadingStore(state => state.loadingStatus)
 
   // ====== 新增資料 POST API  ======
   const createSaleItem = async (itemType: string, price: number) => {
@@ -24,6 +29,7 @@ export default function CreateModal() {
       )
       console.log(data)
       setRenderData(data)
+      loadingStatus(true)
     } catch (error) {
       console.log(error)
     }
@@ -36,6 +42,7 @@ export default function CreateModal() {
     itemType: string
     price: number
   }) => {
+    loadingStatus(false)
     createSaleItem(itemType, price)
     setOpen(false)
     form.resetFields()

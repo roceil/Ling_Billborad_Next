@@ -1,7 +1,11 @@
 import { useRef, useEffect, useState } from 'react'
 import Swal from 'sweetalert2'
 import axios from 'axios'
-import { useEditPriceStore, useSaleItemsStore } from '@/assets/store'
+import {
+  useEditPriceStore,
+  useLoadingStore,
+  useSaleItemsStore,
+} from '@/assets/store'
 
 // 定義 saleItems 的型別
 export type SaleItem = {
@@ -18,6 +22,7 @@ export default function ItemsList() {
   const editRenderDataID = useSaleItemsStore(state => state.editRenderDataID)
   const confirmRenderData = useSaleItemsStore(state => state.confirmRenderData)
   const deleteSaleItem = useSaleItemsStore(state => state.deleteSaleItem)
+  const loadingStatus = useLoadingStore(state => state.loadingStatus)
 
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -88,6 +93,7 @@ export default function ItemsList() {
       .get('https://ling-billborad-next.vercel.app/api/getitems')
       .then(res => {
         setRenderData(res.data)
+        loadingStatus(true)
         console.log(res.data)
       })
       .catch(err => {

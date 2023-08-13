@@ -99,3 +99,17 @@ export const useSaleItemsStore = create<{
   //   }))
   // },
 }))
+
+// ====== 管理是否打開 loading 的狀態 ======
+interface loading {
+  loading: boolean
+  loadingStatus: (curStatus: boolean) => void
+}
+
+export const useLoadingStore = create<loading>(set => ({
+  loading: false,
+  loadingStatus: curStatus =>
+    set((state: { loading: boolean }) => {
+      return { loading: curStatus }
+    }),
+}))
