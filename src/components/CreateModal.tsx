@@ -14,7 +14,7 @@ export default function CreateModal() {
   const createSaleItem = async (itemType: string, price: number) => {
     try {
       const { data } = await axios.post(
-        `${process.env.API_URL}/api/addnewitem`,
+        'https://ling-billborad-next.vercel.app/api/addnewitem',
         {
           itemName: itemType,
           price,
