@@ -2,10 +2,10 @@ import { MongoClient, Db } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 
 // MongoDB 連線設定
-const uri = "mongodb+srv://a0978006326:ff1720651@cluster0.q0mgtuh.mongodb.net";
+const uri = process.env.MONGODB_URI!; // 使用您在Vercel設置的變數名稱
+const dbName = process.env.DB_NAME!;
+const collectionName = process.env.DB_COLLECTION!;
 const client = new MongoClient(uri);
-const dbName = "ling";
-const collectionName = "saleitems";
 
 export default async function handler(
   req: NextApiRequest,
