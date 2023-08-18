@@ -19,7 +19,7 @@ export default function CreateModal() {
   const createSaleItem = async (itemType: string, price: number) => {
     try {
       const { data } = await axios.post(
-        'https://ling-billborad-next.vercel.app/api/addnewitem',
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/addnewitem`,
         {
           itemName: itemType,
           price,
@@ -27,7 +27,7 @@ export default function CreateModal() {
           changedAt: dayjs(new Date()).format('YYYY-MM-DD HH:mm:ss'),
         },
       )
-      console.log(data)
+      alert('新增成功')
       setRenderData(data)
       loadingStatus(true)
     } catch (error) {

@@ -20,8 +20,6 @@ export default function ItemsList() {
   const renderData = useSaleItemsStore(state => state.renderData)
   const setRenderData = useSaleItemsStore(state => state.setRenderData)
   const editRenderDataID = useSaleItemsStore(state => state.editRenderDataID)
-  const confirmRenderData = useSaleItemsStore(state => state.confirmRenderData)
-  const deleteSaleItem = useSaleItemsStore(state => state.deleteSaleItem)
   const loadingStatus = useLoadingStore(state => state.loadingStatus)
 
   const inputRef = useRef<HTMLInputElement>(null)
@@ -32,17 +30,21 @@ export default function ItemsList() {
     editRenderDataID(item._id)
   }
 
-  // ====== 確認價格 ======
-  const confirmHandler = (item: SaleItem) => {
-    const inputValue = inputRef.current?.value
-
-    if (inputValue) {
-      confirmRenderData(item._id, inputValue)
-    }
+  // ====== 刪除種類 DELETE API ======
+  const deleteSaleItems = (id: number) => {
+    axios
+      .delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/deleteitem?id=${id}`)
+      .then(res => {
+        setRenderData(res.data)
+        loadingStatus(true)
+      })
+      .catch(err => {
+        console.log(err)
+      })
   }
 
   // ====== 刪除種類 ======
-  const deleteItemModal = (item: SaleItem) => {
+  const deleteItemModal = (id: number) => {
     Swal.fire({
       title: '確認刪除？',
       icon: 'warning',
@@ -53,7 +55,8 @@ export default function ItemsList() {
       cancelButtonText: '取消',
     }).then(result => {
       if (result.isConfirmed) {
-        deleteHandler(item)
+        loadingStatus(false)
+        deleteSaleItems(id)
         Swal.fire({
           title: '刪除成功',
           text: '1秒後自動關閉',
@@ -61,11 +64,6 @@ export default function ItemsList() {
         })
       }
     })
-  }
-
-  // ====== 確認刪除 ======
-  const deleteHandler = (item: SaleItem) => {
-    deleteSaleItem(item._id)
   }
 
   // ====== 編輯價格切換（待移出） ======
@@ -90,7 +88,7 @@ export default function ItemsList() {
   // ====== 取得資料 GET API ======
   const getSaleItems = () => {
     axios
-      .get('https://ling-billborad-next.vercel.app/api/getitems')
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/getitems`)
       .then(res => {
         setRenderData(res.data)
         loadingStatus(true)
@@ -99,6 +97,32 @@ export default function ItemsList() {
       .catch(err => {
         console.log(err)
       })
+  }
+
+  // ====== 更改價格 PUT API ======
+  const putSaleItems = (id: number, price: number) => {
+    axios
+      .put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/changeitemprice?id=${id}`, {
+        newPrice: price,
+      })
+      .then(res => {
+        alert('更改成功')
+        loadingStatus(true)
+        setRenderData(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+  // ====== 確認價格 ======
+  const confirmHandler = (item: SaleItem) => {
+    const inputValue = inputRef.current?.value
+
+    if (inputValue) {
+      loadingStatus(false)
+      putSaleItems(item._id, Number(inputValue))
+    }
   }
 
   useEffect(() => {
@@ -145,7 +169,7 @@ export default function ItemsList() {
               </button>
               <button
                 type='button'
-                onClick={() => deleteItemModal(item)}
+                onClick={() => deleteItemModal(item._id)}
                 className={`bg-red-500 py-2 px-3 w-1/2 rounded-lg text-white ${
                   item.editing ? '!hidden' : '!block'
                 }`}
