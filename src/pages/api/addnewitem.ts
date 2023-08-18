@@ -2,10 +2,10 @@ import { MongoClient, Db } from "mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 
 // MongoDB 連線設定
-const uri = "mongodb+srv://a0978006326:ff1720651@cluster0.q0mgtuh.mongodb.net";
+const uri = process.env.NEXT_PUBLIC_MONGODB_URI!;
+const dbName = process.env.NEXT_PUBLIC_DB_NAME!;
+const collectionName = process.env.NEXT_PUBLIC_DB_COLLECTION!;
 const client = new MongoClient(uri);
-const dbName = "ling";
-const collectionName = "saleitems";
 
 export default async function handler(
   req: NextApiRequest,
